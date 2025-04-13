@@ -3,49 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BLDC Motor Control Panel</title>
+    <title>BLDC Controller</title>
+    <!-- Link to the external CSS file -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
     <div class="container">
-        <h1>BLDC Motor Control Panel</h1>
+        <h1>BLDC Motor Controller</h1>
+        
+        <!-- Speed Control Section -->
         <div class="controls">
-            <label for="speed-slider">Set Speed (RPM):</label>
-            <input type="range" id="speed-slider" name="speed" min="0" max="5000" step="10" value="0">
-            <span id="speed-display">0 RPM</span>
-            <button id="set-speed">Set Speed</button>
+            <label for="speedInput">Set Speed:</label>
+            <input type="range" id="speedInput" name="speed" min="0" max="100" value="50">
+            <span id="speed-display">50</span>
         </div>
-        <div class="status">
-            <h2>Current Speed: <span id="current-speed">0 RPM</span></h2>
-        </div>
+        
+        <!-- Buttons Section -->
         <div class="actions">
-            <button id="start">Start</button>
-            <button id="stop">Stop</button>
+            <button id="set-speed" class="set-speed">Set Speed</button>
+            <button id="start" class="start">Start Motor</button>
+            <button id="stop" class="stop">Stop Motor</button>
+        </div>
+        
+        <!-- Status Section -->
+        <div class="status">
+            <h2>Current Speed:</h2>
+            <span id="current-speed">0</span>
         </div>
     </div>
+
     <script>
-        // Update speed display dynamically
-        const speedSlider = document.getElementById('speed-slider');
+        // JavaScript to handle interactions
+        const speedInput = document.getElementById('speedInput');
         const speedDisplay = document.getElementById('speed-display');
-        speedSlider.addEventListener('input', () => {
-            speedDisplay.textContent = `${speedSlider.value} RPM`;
+        const currentSpeed = document.getElementById('current-speed');
+        const setSpeedButton = document.getElementById('set-speed');
+        const startButton = document.getElementById('start');
+        const stopButton = document.getElementById('stop');
+
+        // Update speed display when slider changes
+        speedInput.addEventListener('input', () => {
+            speedDisplay.textContent = speedInput.value;
         });
 
-        document.getElementById('set-speed').addEventListener('click', () => {
-            const speed = speedSlider.value;
-            alert(`Speed set to ${speed} RPM`);
-            // Add logic to send speed to the motor controller
+        // Set Speed Button
+        setSpeedButton.addEventListener('click', async () => {
+            const speed = speedInput.value;
+            try {
+                const response = await fetch('/set_speed', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `speed=${encodeURIComponent(speed)}`,
+                });
+                const result = await response.json();
+                if (response.ok) {
+                } else {
+                    alert(`Error: ${result.error}`);
+                }
+            } catch (error) {
+                alert(`Failed to set speed: ${error.message}`);
+            }
         });
 
-        document.getElementById('start').addEventListener('click', () => {
-            alert('Motor started');
-            // Add logic to start the motor
+        // Start Motor Button
+        startButton.addEventListener('click', async () => {
+            try {
+                const response = await fetch('/go', { method: 'POST' });
+                const result = await response.json();
+                if (response.ok) {
+                } else {
+                    alert(`Error: ${result.error}`);
+                }
+            } catch (error) {
+                alert(`Failed to start motor: ${error.message}`);
+            }
         });
 
-        document.getElementById('stop').addEventListener('click', () => {
-            alert('Motor stopped');
-            // Add logic to stop the motor
+        // Stop Motor Button
+        stopButton.addEventListener('click', async () => {
+            try {
+                const response = await fetch('/stop', { method: 'POST' });
+                const result = await response.json();
+                if (response.ok) {
+                } else {
+                    alert(`Error: ${result.error}`);
+                }
+            } catch (error) {
+                alert(`Failed to stop motor: ${error.message}`);
+            }
         });
+
+        // Function to fetch the current speed from the backend
+        async function fetchCurrentSpeed() {
+            try {
+                const response = await fetch('/get_speed', { method: 'GET' });
+                const result = await response.json();
+                if (response.ok) {
+                    currentSpeed.textContent = result.speed; // Assuming the backend returns { "speed": <value> }
+                } else {
+                    console.error(`Error fetching current speed: ${result.error}`);
+                }
+            } catch (error) {
+                console.error(`Failed to fetch current speed: ${error.message}`);
+            }
+        }
+
+        // Periodically fetch the current speed every 2 seconds
+        setInterval(fetchCurrentSpeed, 2000);
     </script>
 </body>
 </html>
