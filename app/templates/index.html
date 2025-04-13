@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BLDC Motor Control Panel</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>BLDC Motor Control Panel</h1>
+        <div class="controls">
+            <label for="speed-slider">Set Speed (RPM):</label>
+            <input type="range" id="speed-slider" name="speed" min="0" max="5000" step="10" value="0">
+            <span id="speed-display">0 RPM</span>
+            <button id="set-speed">Set Speed</button>
+        </div>
+        <div class="status">
+            <h2>Current Speed: <span id="current-speed">0 RPM</span></h2>
+        </div>
+        <div class="actions">
+            <button id="start">Start</button>
+            <button id="stop">Stop</button>
+        </div>
+    </div>
+    <script>
+        // Update speed display dynamically
+        const speedSlider = document.getElementById('speed-slider');
+        const speedDisplay = document.getElementById('speed-display');
+        speedSlider.addEventListener('input', () => {
+            speedDisplay.textContent = `${speedSlider.value} RPM`;
+        });
+
+        document.getElementById('set-speed').addEventListener('click', () => {
+            const speed = speedSlider.value;
+            alert(`Speed set to ${speed} RPM`);
+            // Add logic to send speed to the motor controller
+        });
+
+        document.getElementById('start').addEventListener('click', () => {
+            alert('Motor started');
+            // Add logic to start the motor
+        });
+
+        document.getElementById('stop').addEventListener('click', () => {
+            alert('Motor stopped');
+            // Add logic to stop the motor
+        });
+    </script>
+</body>
+</html>

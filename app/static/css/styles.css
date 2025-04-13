@@ -1,0 +1,91 @@
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to bottom, #1e3c72, #2a5298);
+    color: #fff;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    text-align: center;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 400px;
+}
+
+h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.controls, .status, .actions {
+    margin: 20px 0;
+}
+
+label {
+    font-size: 1.2rem;
+}
+
+input[type="range"] {
+    width: 100%;
+    margin: 10px 0;
+}
+
+#speed-display {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #ffd700;
+    margin-left: 10px;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+button#start {
+    background: #28a745;
+    color: #fff;
+}
+
+button#stop {
+    background: #dc3545;
+    color: #fff;
+}
+
+button#start:hover {
+    background: #218838;
+}
+
+button#stop:hover {
+    background: #c82333;
+}
+
+button#set-speed {
+    background: #007bff;
+    color: #fff;
+}
+
+button#set-speed:hover {
+    background: #0056b3;
+}
+
+h2 {
+    font-size: 1.5rem;
+}
+
+#current-speed {
+    font-weight: bold;
+    color: #ffd700;
+}
